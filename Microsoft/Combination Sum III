@@ -1,0 +1,31 @@
+class Solution {
+public:
+    vector<vector<int>> combinationSum3(int k, int n) {
+        vector<vector<int>>ans;
+        vector<int>temp;
+        vector<int>arr;
+        
+        for(int i=1; i<10; i++)
+            arr.push_back(i);
+        
+        solve(arr,ans,temp,k,n,0);
+        return ans;
+    }
+    
+    void solve(vector<int>&arr,vector<vector<int>>&ans,vector<int>&temp,int k,int n,int ind){
+        if(n==0){
+            if(temp.size()==k)
+                ans.push_back(temp);
+            return;
+        }
+        
+        for(int i=ind; i<arr.size(); i++){
+            if(arr[i] > n)
+                break;
+            temp.push_back(arr[i]);
+            solve(arr,ans,temp,k,n-arr[i],i+1);
+            temp.pop_back();
+        }
+        
+    }
+};

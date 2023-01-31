@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int numberOfWays(int startPos, int endPos, int k) {
+        
+        vector<vector<int>>dp(3010,vector<int>(k+1,-1));
+        long long int ans = solve(startPos,endPos,k,dp)%(1000000007);
+        
+        return ans;
+    }
+    int solve(int current_index,int end,int k,vector<vector<int>>&dp){
+        
+        if(k==0){
+            if(current_index==end)
+                return  1;
+            return  0;
+        }
+        
+        if(dp[current_index+1000][k] != -1)
+            return dp[current_index+1000][k];
+        
+        long long count = (solve(current_index-1,end,k-1,dp) + solve(current_index+1,end,k-1,dp));
+        
+        return dp[current_index+1000][k] = count%1000000007;
+    }
+};

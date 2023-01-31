@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int countNicePairs(vector<int>& nums) {
+        vector<int>v;
+        int mod = 1000000007;
+        
+        for(int i=0; i<nums.size(); i++){
+            string s = to_string(nums[i]);
+            reverse(s.begin(),s.end());
+            v.push_back(stoi(s));
+        }
+        
+        map<int,int>m;
+        
+        for(int i=0; i<nums.size(); i++){
+            m[nums[i]-v[i]]++;
+        }
+        
+        map<int,int> :: iterator itr;
+        int ans=0;
+        for(itr=m.begin(); itr!=m.end(); itr++){
+            int n = --itr->second;
+            ans+=((n*1LL*(n+1))/2)%mod;
+        }
+        
+        return (ans)%mod;
+    }
+};

@@ -1,0 +1,54 @@
+class Solution {
+public:
+    vector<int> sortArray(vector<int>& nums) {
+        
+        merge(nums,0,nums.size()-1);
+        
+        return nums;
+    }
+    
+    void merge(vector<int>&nums,int s,int e){
+        if(s==e)
+            return;
+        
+        int mid = s+(e-s)/2;
+        
+        merge(nums,s,mid);
+        merge(nums,mid+1,e);
+        
+        merge_sort(nums,s,mid,e);
+        
+    }
+    
+    void merge_sort(vector<int>&nums,int s,int mid,int e){
+        
+        vector<int>v1,v2;
+        for(int i=s; i<=mid; i++){
+            v1.push_back(nums[i]);
+        }
+        
+        for(int i=mid+1; i<=e; i++){
+            v2.push_back(nums[i]);
+        }
+        
+        int ptr1=0,ptr2=0;
+        int ind = s;
+        
+        while(ptr1<v1.size() && ptr2<v2.size()){
+            
+            if(v1[ptr1] < v2[ptr2])
+                nums[ind++] = v1[ptr1++];
+            else
+                nums[ind++] = v2[ptr2++];
+        }
+        
+        while(ptr1<v1.size()){
+            nums[ind++] = v1[ptr1++];
+        }
+        
+        while(ptr2<v2.size()){
+            nums[ind++] = v2[ptr2++];
+        }
+    }
+    
+};

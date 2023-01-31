@@ -1,0 +1,39 @@
+class Solution {
+private:
+    int fib[31];
+    
+public:
+    int findIntegers(int n) {
+        fillFib();
+        
+        int ans = 0,bit = 30; 
+        bool lastBitOne = false;
+        
+        while(bit>=0){
+            if((n&(1<<bit))){
+                ans += fib[bit];
+                if(lastBitOne) return ans;
+                lastBitOne = true;
+            }
+            
+            else{
+                lastBitOne = false;
+            }
+
+            bit--;
+        }
+        
+        return ans+1;
+    }
+    
+    void fillFib(){
+        
+        fib[0] = 1;
+        fib[1] = 2;
+        for(int i=2;i<31;i++){
+            fib[i] = fib[i-1] + fib[i-2];
+        }
+        
+    }
+    
+};

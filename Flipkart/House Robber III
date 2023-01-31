@@ -1,0 +1,33 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+	void rob(TreeNode* root, int& withSelf, int& withoutSelf) {
+        if(root == NULL) return;
+        
+        int lwithSelf = 0, lwithoutSelf = 0, rwithSelf = 0, rwithoutSelf = 0;
+        
+        rob(root->left, lwithSelf, lwithoutSelf);
+        rob(root->right, rwithSelf, rwithoutSelf);
+        
+        withSelf = lwithoutSelf + rwithoutSelf + root->val;
+        
+        withoutSelf = max(lwithSelf, lwithoutSelf) + max(rwithSelf, rwithoutSelf);
+    }
+public:
+    int rob(TreeNode* root) {
+        
+        int withSelf = 0, withoutSelf = 0;
+        rob(root, withSelf, withoutSelf);
+        
+        return max(withSelf, withoutSelf);
+    }
+};

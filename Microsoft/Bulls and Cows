@@ -1,0 +1,36 @@
+class Solution {
+public:
+    string getHint(string secret, string guess) {
+        string ans;
+        int bulls=0,cows=0;
+        
+        for(int i=0; i<secret.size(); i++){
+            if(secret[i] == guess[i]){
+                bulls++;
+                secret[i] = '-';
+                guess[i] = '-';
+            }
+        }
+        map<int,int>msecret,mguess;
+        
+        for(int i=0; i<secret.size(); i++){
+            if(secret[i] != '-'){
+                msecret[secret[i]-'0']++;
+                mguess[guess[i]-'0']++;
+            }
+        }
+        
+        for(int i=0; i<secret.size(); i++){
+            if(secret[i] != '-' && msecret.find(secret[i]-'0') != msecret.end()){
+                cows+=min(msecret[secret[i]-'0'] , mguess[secret[i]-'0']);
+                msecret.erase(secret[i]-'0');
+            }
+        }
+        
+        ans+=to_string(bulls);
+        ans.push_back('A');
+        ans+=to_string(cows);
+        ans.push_back('B');
+        return ans;
+    }
+};

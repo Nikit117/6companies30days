@@ -1,0 +1,44 @@
+#define ll long long
+class Solution {
+public:
+    int countPaths(int n, vector<vector<int>>& roads) {
+        vector<pair<ll,ll>>adj[n];
+        
+        for(int i=0; i<roads.size(); i++){
+            adj[roads[i][0]].push_back({roads[i][1],roads[i][2]});
+            adj[roads[i][1]].push_back({roads[i][0],roads[i][2]});
+        }
+        
+        priority_queue<pair<ll,ll>,vector<pair<ll,ll>>,greater<pair<ll,ll>>>pq;
+        vector<ll>distance(n,LONG_MAX);
+        vector<ll>ways(n,0);
+        
+        int mod = (1e9+7);
+        ways[0] = 1;
+        distance[0] = 0;
+        pq.push({0,0});
+        
+        while(!pq.empty()){
+            ll currentvertex = pq.top().second;
+            ll weight = pq.top().first;
+            pq.pop();
+            vector<pair<ll,ll>> :: iterator itr;
+            
+            for(itr=adj[currentvertex].begin(); itr!=adj[currentvertex].end(); itr++){
+                ll nextvertex = itr->first;
+                ll possibledistance = weight + itr->second;
+                
+                if(possibledistance < distance[nextvertex]){
+                    distance[nextvertex] = possibledistance;
+                    ways[nextvertex] = ways[currentvertex];
+                    pq.push({possibledistance,nextvertex});
+                }
+                
+                else if(possibledistance == distance[nextvertex])
+                    ways[nextvertex] = (ways[nextvertex] + ways[currentvertex])%mod;
+            }
+        }
+        
+        return (ways[n-1])%mod;
+    }
+};

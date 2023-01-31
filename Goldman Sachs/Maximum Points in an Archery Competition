@@ -1,0 +1,38 @@
+class Solution {
+public:   
+    int m=0;
+    vector<int> bob;
+    
+    vector<int> maximumBobPoints(int numArrows, vector<int>& aA) 
+    {
+        vector<int> arrows;
+        int n=aA.size();
+        helper(numArrows, aA, arrows, 0, 0, n);
+        return bob;
+    }
+    
+     void helper(int numArrows, vector<int>&alice, vector<int>&arrows, int score, int index,int n)
+    {
+        if(index == n)
+        {
+            if(m<score)
+            {
+                m=score;
+                bob=arrows;
+                bob[0]+=numArrows;
+            }
+            return;
+        }
+        
+        arrows.push_back(0);
+        helper(numArrows, alice, arrows,score, index+1, n);
+        arrows.pop_back();
+        
+        if(alice[index]+1 <= numArrows)
+        {
+            arrows.push_back(alice[index]+1);
+            helper(numArrows-alice[index]-1, alice, arrows,score+index, index+1,  n);
+            arrows.pop_back();
+        }   
+    }
+};

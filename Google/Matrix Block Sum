@@ -1,0 +1,53 @@
+class Solution {
+public:
+    vector<vector<int>> matrixBlockSum(vector<vector<int>>& mat, int k) {
+        
+        vector<vector<int>>prefix_sum(mat.size(),vector<int>(mat[0].size(),0));
+        int count=0,col=0;
+        
+        while(count<prefix_sum[0].size()){
+            int left = col-k;
+            int right = col+k;
+            
+            if(left<0)
+                left=0;
+            if(right>=prefix_sum[0].size())
+                right = prefix_sum[0].size()-1;
+            
+            int sum=0;
+            for(int i=0; i<prefix_sum.size(); i++){
+                
+                for(int j=left; j<=right; j++){
+                    sum+=mat[i][j];
+                }
+                
+                prefix_sum[i][col] = sum;
+            }
+            
+            count++;
+            col++;
+        }
+        
+        for(int i=0; i<mat.size(); i++){
+            
+            int upper = i-k;
+            int lower = i+k;
+            if(upper<0)
+                upper=0;
+            if(lower>=mat.size())
+                lower = mat.size()-1;
+    
+            for(int j=0; j<mat[0].size(); j++){
+                if(upper==0){
+                    mat[i][j] = prefix_sum[lower][j];
+                }
+                else{
+                    mat[i][j] = prefix_sum[lower][j] - prefix_sum[upper-1][j];
+                }
+            }
+            
+        }
+        
+        return mat;
+    }
+};

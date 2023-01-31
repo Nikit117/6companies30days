@@ -1,0 +1,46 @@
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+        
+        vector<int>min_distance(n+1,INT_MAX);
+        vector<pair<int,int>>adj[n+1];
+        for(int i=0; i<times.size(); i++){
+            adj[times[i][0]].push_back({times[i][1],times[i][2]});
+        }
+        
+        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>pq;
+        pq.push({0,k});
+        min_distance[k] = 0;
+        
+        while(!pq.empty()){
+            
+            int current_vertex = pq.top().second;
+            int distance = pq.top().first;
+            pq.pop();
+            
+            vector<pair<int,int>> :: iterator itr;
+            
+            for(itr=adj[current_vertex].begin(); itr!=adj[current_vertex].end(); itr++){
+                
+                int next_vertex = itr->first;
+                int weight = itr->second;
+                int possible_distance = weight + distance;
+                
+                if(possible_distance < min_distance[next_vertex]){
+                    min_distance[next_vertex] = possible_distance;
+                    pq.push({possible_distance,next_vertex});
+                }
+            }
+        }
+        
+        int ans = INT_MIN;
+        for(int i=1; i<=n; i++){
+            ans = max(ans,min_distance[i]);
+        }
+        
+        if(ans==INT_MAX)
+            return -1;
+        
+        return ans;
+    }
+};

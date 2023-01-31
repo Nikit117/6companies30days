@@ -1,0 +1,77 @@
+class Solution {
+public:
+    int maxSumMinProduct(vector<int>& nums) {
+        
+        vector<long long int>prefix_sum;
+        long long int sum=0;
+        int n = nums.size();
+        
+        for(int i=0; i<n; i++){
+            sum+=nums[i];
+            prefix_sum.push_back(sum);
+        }
+        
+        vector<int>left_index(n,-1),right_index(n,n);
+        stack<int>s;
+        
+        for(int i=0; i<n; i++){
+            
+            if(!s.empty() && nums[s.top()]<nums[i]){
+                left_index[i] = s.top();
+                s.push(i);
+            }
+            
+            else{
+                while(!s.empty() && nums[s.top()]>=nums[i]){
+                    s.pop();
+                }
+                
+                if(!s.empty()){
+                    left_index[i] = s.top();
+                }
+                s.push(i);
+            }
+        }
+        
+        while(!s.empty()){
+            s.pop();
+        }
+        
+        for(int i=n-1; i>=0; i--){
+            
+            if(!s.empty() && nums[s.top()] < nums[i]){
+                right_index[i] = s.top();
+                s.push(i);
+            }
+            
+            else{
+                while(!s.empty() && nums[s.top()]>=nums[i]){
+                    s.pop();
+                }
+                
+                if(!s.empty()){
+                    right_index[i] = s.top();
+                }
+                s.push(i);
+            }
+        }
+        
+        long long int ans=0;
+        int mod = 1000000007;
+        
+        for(int i=0; i<n; i++){
+            
+            long long int res = nums[i];
+            if(left_index[i] != -1){
+                res = (res*(prefix_sum[right_index[i]-1] - prefix_sum[left_index[i]]));
+            }
+            else{
+                res =(res*prefix_sum[right_index[i]-1]);
+            }
+            
+            ans = max(ans,res);
+        }
+        
+        return ans%mod;
+    }
+};

@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int maxSum(vector<vector<int>>& grid) {
+        
+        vector<vector<int>>prefix_sum;
+        
+        for(int i=0; i<grid.size(); i++){
+            int sum=0;
+            vector<int>temp;
+            
+            for(int j=0; j<grid[0].size(); j++){
+                sum+=grid[i][j];
+                temp.push_back(sum);
+            }
+            
+            prefix_sum.push_back(temp);
+        }
+        
+        int ans=INT_MIN;
+        
+        for(int i=0; i<grid.size()-2; i++){
+            
+            for(int j=0; j<grid[0].size()-2; j++){
+                
+                int sum = prefix_sum[i][j+2] + grid[i+1][j+1] + prefix_sum[i+2][j+2];\
+                    
+                if(j>0){
+                    sum-= (prefix_sum[i][j-1] + prefix_sum[i+2][j-1]);
+                }
+                
+                ans = max(ans,sum);
+            }
+        }
+        
+        return ans;
+    }
+};

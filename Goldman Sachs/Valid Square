@@ -1,0 +1,39 @@
+class Solution {
+public:
+    bool validSquare(vector<int>& p1, vector<int>& p2, vector<int>& p3, vector<int>& p4) {
+        
+        vector<int>side = {
+            calculate_length(p1,p2),
+            calculate_length(p1,p3),
+            calculate_length(p1,p4),
+            calculate_length(p2,p3),
+            calculate_length(p2,p4),
+            calculate_length(p3,p4),
+        };
+        
+        map<int,int>m;
+        for(int i=0; i<side.size(); i++){
+            m[side[i]]++;
+        }
+        
+        if(m.size()!=2)
+            return false;
+        
+        for(auto it: m){
+            if(it.first==0)
+                return false;
+        }
+        
+        auto it = m.begin();
+        if(it->second==2 || it->second==4)
+            return true;
+        
+        return false;
+    }
+    
+    int calculate_length(vector<int>&x,vector<int>&y){
+        
+        return (y[0]-x[0])*(y[0]-x[0]) + (y[1]-x[1])*(y[1]-x[1]);
+    }
+    
+};

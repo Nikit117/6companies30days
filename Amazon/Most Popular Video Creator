@@ -1,0 +1,56 @@
+class Solution {
+public:
+    vector<vector<string>> mostPopularCreator(vector<string>& creators, vector<string>& ids, vector<int>& views) {
+        
+        map<string,long long int>m;
+        for(int i=0; i<creators.size(); i++){
+            m[creators[i]]+=views[i];
+        }
+        
+        unordered_map<string,pair<string,int>>m1;
+        vector<vector<string>>ans;
+        
+        for(int i=0; i<creators.size(); i++){
+            
+            if(m1.find(creators[i]) != m1.end() && m1[creators[i]].second < views[i]){
+                m1[creators[i]].first = ids[i];
+                m1[creators[i]].second = views[i];
+            }
+            
+            else if(m1.find(creators[i]) != m1.end() && m1[creators[i]].second == views[i] && m1[creators[i]].first>ids[i]){
+                m1[creators[i]].first = ids[i];
+                m1[creators[i]].second = views[i];
+            }
+            
+            else if(m1.find(creators[i]) == m1.end()){
+                m1[creators[i]] = {ids[i],views[i]};
+            }
+        }
+        
+        vector<pair<long long int,string>>v;
+        map<string,long long int> :: iterator itr;
+        
+        for(itr=m.begin(); itr!=m.end(); itr++){
+            v.push_back({itr->second,itr->first});
+        }
+        
+        sort(v.begin(),v.end());
+        vector<string>s;
+        s.push_back(v.back().second);
+        
+        for(int i=v.size()-2; i>=0; i--){
+            if(v[i].first == v[i+1].first){
+                s.push_back(v[i].second);
+            }
+            else{
+                break;
+            }
+        }
+        
+        for(int i=0; i<s.size(); i++){
+            ans.push_back({s[i],m1[s[i]].first});
+        }
+        
+        return ans;
+    }
+};

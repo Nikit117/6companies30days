@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<int>v;
+    Solution(vector<int>& w) {
+        v.clear();
+        int sum=0;
+        for(int i=0; i<w.size(); i++){
+            sum+=w[i];
+            v.push_back(sum);
+        }
+    }
+    
+    int pickIndex() {
+        int random_number = rand()%v.back();
+        auto it = upper_bound(v.begin(),v.end(),random_number);
+        return (it-v.begin());
+    }
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution* obj = new Solution(w);
+ * int param_1 = obj->pickIndex();
+ */

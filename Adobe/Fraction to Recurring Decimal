@@ -1,0 +1,59 @@
+class Solution {
+public:
+    string fractionToDecimal(long long int numerator, long long int denominator) {
+    
+        string ans;
+        map<long long int,long long int>m;
+        long long int flag=0;
+        if(numerator<0 && denominator<0){
+            numerator = abs(numerator);
+            denominator = abs(denominator);
+        }
+        
+        else if(numerator<0 && denominator>0){
+            flag = 1;
+            numerator = abs(numerator);
+        }
+        
+        else if(numerator>0 && denominator<0){
+            flag=1;
+            denominator = abs(denominator);
+        }
+        
+        long long int quotient = numerator/denominator;
+        long long int remainder = numerator % denominator;
+        ans+=(to_string(quotient));
+        
+        if(remainder == 0){
+            if(flag==1){
+                ans.insert(0,"-");
+            }
+            return ans;
+        }
+        
+        else{
+            ans+=".";
+            while(remainder != 0){
+            
+                if(m.find(remainder) != m.end()){
+                    long long int len = m[remainder];
+                    ans.insert(len,"(");
+                    ans.push_back(')');
+                    break;
+                }
+                
+                m[remainder] = ans.size();
+                numerator = remainder*10;
+                quotient = numerator/denominator;
+                remainder = numerator % denominator;
+                ans+=(to_string(quotient));
+            }
+        }
+        
+        if(flag==1){
+            ans.insert(0,"-");
+        }
+        
+        return ans;
+    }
+};

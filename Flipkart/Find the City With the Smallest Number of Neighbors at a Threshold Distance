@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int findTheCity(int n, vector<vector<int>>& edges, int distanceThreshold) {
+        
+        int ans=0,mini=INT_MAX;
+        vector<pair<int,int>>adj[n];
+        
+        for(int i=0; i<edges.size(); i++){
+            adj[edges[i][0]].push_back({edges[i][1],edges[i][2]});
+            adj[edges[i][1]].push_back({edges[i][0],edges[i][2]});
+        }
+        for(int i=0; i<n; i++){
+            
+            vector<int>min_distance(n,INT_MAX);
+            priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>pq;
+            pq.push({0,i});
+            
+            while(!pq.empty()){
+                
+                int current_vertex = pq.top().second;
+                int distance = pq.top().first;
+                pq.pop();
+                
+                vector<pair<int,int>> :: iterator itr;
+                
+                for(itr=adj[current_vertex].begin(); itr!=adj[current_vertex].end(); itr++){
+                    
+                    int next_vertex = itr->first;
+                    int weight = itr->second;
+                    int possible_distance = weight+distance;
+                    
+                    if(possible_distance < min_distance[next_vertex]){
+                        pq.push({possible_distance,next_vertex});
+                        min_distance[next_vertex] = possible_distance;
+                    }
+                }
+            }
+            
+            int count=0;
+            for(int j=0; j<n; j++){
+                if(i!=j && min_distance[j]<=distanceThreshold)
+                    count++;
+            }
+            
+            if(mini >= count){
+                mini = count;
+                ans = i;
+            }
+        }
+        
+        return ans;
+    }
+};

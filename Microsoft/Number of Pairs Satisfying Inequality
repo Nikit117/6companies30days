@@ -1,0 +1,65 @@
+class Solution {
+public:
+    long long numberOfPairs(vector<int>& nums1, vector<int>& nums2, int diff) {
+        long long ans=0;
+        vector<int>nums;
+        int n = nums1.size();
+        
+        for(int i=0; i<n; i++){
+            nums.push_back(nums1[i]-nums2[i]);
+        }
+        
+        merge(nums,0,n-1,diff,ans);
+        return ans;
+    }
+    
+    void merge(vector<int>&nums,int s,int e,int diff,long long &ans){
+        
+        if(s==e)
+            return;
+        int mid = s+(e-s)/2;
+        merge(nums,s,mid,diff,ans);
+        merge(nums,mid+1,e,diff,ans);
+        
+        mergesort(nums,s,mid,e,diff,ans);
+    }
+    
+    void mergesort(vector<int>&nums,int s,int mid,int e,int diff,long long &ans){
+        vector<int>v1,v2;
+        for(int i=s; i<=mid; i++){
+            v1.push_back(nums[i]);
+        }
+        for(int i=mid+1; i<=e; i++){
+            v2.push_back(nums[i]);
+        }
+        
+        int index = s;
+        int ptr1=0,ptr2=0;
+        while(ptr1<v1.size() && ptr2<v2.size()){
+            if(v1[ptr1] <= v2[ptr2]+diff){
+                ans+=(v2.size()-ptr2);
+                ptr1++;
+            }
+            else{
+                ptr2++;
+            }
+        }
+        
+        ptr1=0,ptr2=0;
+        while(ptr1<v1.size() && ptr2<v2.size()){
+            if(v1[ptr1] < v2[ptr2]){
+                nums[index++] = v1[ptr1++];
+            }
+            else{
+                nums[index++] = v2[ptr2++];
+            }
+        }
+        
+        while(ptr1<v1.size()){
+            nums[index++] = v1[ptr1++];
+        }
+        while(ptr2<v2.size()){
+            nums[index++] = v2[ptr2++];
+        }
+    }
+};

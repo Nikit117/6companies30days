@@ -1,0 +1,43 @@
+class Solution {
+public:
+    int minMutation(string startGene, string endGene, vector<string>& bank) {
+        
+        int count=0;
+        set<string>vis;
+        queue<string>q;
+        
+        q.push(startGene);
+        vis.insert(startGene);
+        
+        while(!q.empty()){
+            int size = q.size();
+            
+            while(size--){
+                string node = q.front();
+                q.pop();
+                
+                if(node==endGene)
+                    return count;
+                
+                string s = "ACGT";
+                for(int i=0; i<4; i++){
+                    
+                    for(int j=0; j<node.size(); j++){
+                        
+                        string adj_node = node;
+                        adj_node[j] = s[i];
+                        
+                        if(vis.find(adj_node)==vis.end() && find(bank.begin(),bank.end(),adj_node) != bank.end()){
+                            q.push(adj_node);
+                            vis.insert(adj_node);
+                        }
+                    }
+                }
+            }
+            
+            count++;
+        }
+        
+        return -1;
+    }
+};

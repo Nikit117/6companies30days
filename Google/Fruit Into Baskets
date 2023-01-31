@@ -1,0 +1,75 @@
+class Solution {
+public:
+    int totalFruit(vector<int>& fruits) {
+        
+        if(fruits.size()<=2)
+            return fruits.size();
+        
+        unordered_map<int,pair<int,int>>m;
+        queue<pair<int,int>>q;
+        int count=0;
+        
+        for(int i=0; i<fruits.size()-1; i++){
+            if(fruits[i]==fruits[i+1])
+                count++;
+            else{
+                q.push({fruits[i],(count+1)});
+                count=0;
+            }
+        }
+        
+        q.push({fruits[fruits.size()-1],count+1});
+        int ans=0,sum=0;
+        m[q.front().first] = {q.front().second,q.front().second};
+        sum+=q.front().second;
+        q.pop();
+        
+        if(q.empty())
+            return sum;
+        
+        m[q.front().first] = {q.front().second,q.front().second};
+        sum+=q.front().second;
+        ans = sum;
+        
+        int prev = q.front().first;
+        q.pop();
+        unordered_map<int,pair<int,int>> :: iterator itr;
+        
+        while(!q.empty()){
+            
+            if(m.size()==2 && m.find(q.front().first)!=m.end()){
+                pair<int,int>p;
+                p = m[q.front().first];
+                p.first+=q.front().second;
+                
+                p.second = q.front().second;
+                m[q.front().first] = p;
+                prev = q.front().first;
+            }
+            
+            else{
+                
+                for(itr=m.begin(); itr!=m.end(); itr++){
+                    if(itr->first != prev){
+                        m.erase(itr->first);
+                        break;
+                    }
+                }
+                
+                m[prev] = {m[prev].second,m[prev].second};
+                m[q.front().first] = {q.front().second,q.front().second};
+                prev = q.front().first;
+            }
+            
+            sum=0;
+            for(itr=m.begin(); itr!=m.end(); itr++){
+                sum+=itr->second.first;
+            }
+            
+            ans = max(ans,sum);
+            q.pop();
+        }
+        
+        return ans;
+    }
+};

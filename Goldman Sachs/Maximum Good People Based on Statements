@@ -1,0 +1,55 @@
+class Solution {
+public:
+    int maximumGood(vector<vector<int>>& statements) {
+        int n = statements.size();
+        int integer=1;
+        int ans=0;
+        
+        for(integer; integer<(1<<n); integer++){
+            
+            vector<int>binary(n,0);
+            int count = solve(binary,integer);
+            
+            if(check(statements,binary)){
+                ans = max(ans,count);
+            }
+        }
+        
+        return ans;
+    }
+    
+    int solve(vector<int>&binary,int integer){
+        int count=0;
+        
+        for(int i=0; i<binary.size(); i++){
+            if(integer&1==1){
+                count++;
+                binary[i] = 1;
+            }
+            
+            integer>>=1;
+        }
+        
+        reverse(binary.begin(),binary.end());
+        return count;
+    }
+    
+    bool check(vector<vector<int>>&statements,vector<int>&binary){
+        
+        for(int i=0; i<binary.size(); i++){
+            if(binary[i]==0)
+                continue;
+            
+            for(int j=0; j<binary.size(); j++){
+                
+                if(statements[i][j] == 2)
+                    continue;
+                
+                if(statements[i][j] != binary[j])
+                    return false;
+            }
+        }
+        
+        return true;
+    }
+};

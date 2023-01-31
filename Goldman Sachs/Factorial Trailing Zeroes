@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int trailingZeroes(int n) {
+        int ans=0;
+        int count=1,power=1;
+        
+        while(count>0){
+            count = (n/pow(5,power));
+            power++;
+            ans+=count;
+        }
+        
+        return ans;
+    }
+};

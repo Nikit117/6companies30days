@@ -1,0 +1,38 @@
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<int>adj[numCourses];
+        for(int i=0; i<prerequisites.size(); i++){
+            adj[prerequisites[i][1]].push_back(prerequisites[i][0]);
+        }
+        
+        vector<bool>vis(numCourses,false);
+        vector<bool>rec(numCourses,false);
+        
+        for(int i=0; i<numCourses; i++){
+            if(!vis[i]){
+                if(isCycle(adj,vis,rec,i))
+                    return false;
+            }
+        }
+        return true;
+    }
+    
+    bool isCycle(vector<int>adj[],vector<bool>&vis,vector<bool>&rec,int src){
+        vis[src] = true;
+        rec[src] = true;
+        vector<int> :: iterator itr;
+        
+        for(itr = adj[src].begin(); itr!=adj[src].end(); itr++){
+            if(!vis[*itr]){
+                if(isCycle(adj,vis,rec,*itr))
+                    return true;
+            }
+            else if(rec[*itr]==true)
+                return true;
+        }
+        
+        rec[src] = false;
+        return false;
+    }
+};

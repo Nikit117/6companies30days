@@ -1,0 +1,27 @@
+class Solution {
+public:
+    bool hasAllCodes(string s, int k) {
+        
+        if(k>s.size())
+            return false;
+        
+        set<string>set;
+        string str;
+        for(int i=0; i<k; i++){
+            str.push_back(s[i]);
+        }
+        
+        set.insert(str);
+        for(int i=k; i<s.size(); i++){
+            str.erase(str.begin());
+            str.push_back(s[i]);
+            set.insert(str);
+        }
+        
+        if(set.size()>=pow(2,k))
+            return true;
+        
+        return false;
+        
+    }
+};

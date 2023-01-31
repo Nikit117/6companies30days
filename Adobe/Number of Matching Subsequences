@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int numMatchingSubseq(string s, vector<string>& words) {
+        
+        map<char,set<int>>m;
+        for(int i=0; i<s.size(); i++){
+            m[s[i]].insert(i);
+        }
+        
+        int ans=0;
+        
+        for(int i=0; i<words.size(); i++){
+            int prev,j=1;
+            
+            if(m.find(words[i][0]) != m.end())
+                prev = *m[words[i][0]].begin();
+            else
+                continue;
+            
+            for(j=1; j<words[i].size(); j++){
+                auto it  = m[words[i][j]].upper_bound(prev);
+                if((*it)<=prev)
+                    break;
+                
+                prev = *it;
+            }
+            
+            if(j==words[i].size())
+                ans++;
+        }
+        
+        return ans;
+    }
+};

@@ -1,0 +1,43 @@
+class Solution {
+public:
+    vector<int> closestPrimes(int left, int right) {
+        
+        vector<int>ans;
+        ans.push_back(-1);
+        ans.push_back(-1);
+        vector<int>v;
+        
+        for(left; left<=right; left++){
+            if((left&1==0 && left>2) || left==1)
+                continue;
+            
+            int flag=0;
+            
+            for(int i=2; i*i<=left; i++){
+                if(left%i==0){
+                    flag=1;
+                    break;
+                }
+            }
+            
+            if(flag==0)
+                v.push_back(left);
+        }
+        
+        if(v.size()>1){
+            int value = INT_MAX;
+            
+            for(int i=0; i<v.size()-1; i++){
+                
+                if(v[i+1]-v[i] < value){
+                    ans[0] = v[i];
+                    ans[1] = v[i+1];
+                    value = v[i+1]-v[i];
+                }
+            }
+            
+        }
+        
+        return ans;
+    }
+};
